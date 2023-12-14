@@ -1,2 +1,17 @@
+# ide files
+__pycache__
 .idea
-venv
+
+# virtual env
+venv/
+.env
+
+# build/dist files
+*/build/
+*/dist/
+auto_wo/
+
+# other files
+*.log
+*.bak
+*.json
