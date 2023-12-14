@@ -1,0 +1,22 @@
+{
+    "WEBSITE": {
+        "_comment1": "Specify website URL and login credentials.",
+        "url": "https://proms.truecorp.co.th/proms",
+        "user":"Siriro2",
+        "pass": "Senses19871987$"
+    },
+    "CHROME": {
+        "_comment1": "Specify installation path of Chrome browser.",
+        "binary_path": "D:/Chrome/chrome.exe",
+        "driver_path": "D:/Chrome/driver/chromedriver.exe"
+    },
+    "RUNMODE": "test",
+    "Preferences": {
+        "_comment1": "Supported modes : Light, Dark, System",
+        "app_mode": "Light",
+        "_comment2": "Supported themes : green, dark-blue, blue",
+        "color_theme": "blue",
+        "_comment3": "Captcha waiting time (s) when login",
+        "captcha-wait": 12
+    }
+}
