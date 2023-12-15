@@ -13,7 +13,7 @@
     "RUNMODE": "real",
     "Preferences": {
         "_comment1": "Supported modes : Light, Dark, System",
-        "app_mode": "Light",
+        "app_mode": "System",
         "_comment2": "Supported themes : green, dark-blue, blue",
         "color_theme": "blue",
         "_comment3": "Captcha waiting time (s) when login",

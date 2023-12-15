@@ -145,9 +145,6 @@ class App(ctk.CTk):
         proms_node = "" # project_excel.loc[order, 'Proms Node'].value
         step_nth = [False] * 4
         try:
-            # click side menu "Work Order", wait for page load
-            self.web.browser_xpathclick('//span[contains(text(), "Work Order")]/../..//a')
-            time.sleep(2)
             # click button "New Work Order", wait for page load
             self.web.browser_xpathclick('//button[@id="newWorkOrderBtn"]')
             time.sleep(2)
@@ -158,7 +155,7 @@ class App(ctk.CTk):
                 '//select[@id="template_sos_type"]//option[contains(text(), "Core Online")]'
             ).get_attribute("value")
             Select(dropdown).select_by_value(option_value)
-            time.sleep(1)
+            time.sleep(2)
             # input SiteID (Proms Site), click outside, wait
             self.web.browser_input('//input[@id="siteNodeId"]', proms_site)
             time.sleep(2)
@@ -248,7 +245,7 @@ class App(ctk.CTk):
 
             # click button "Create Work Order", long wait until
             self.web.browser_xpathclick('//button[contains(text(), "OK")]')
-            time.sleep(4)
+            time.sleep(6)
             step_nth[3] = True
 
         except NoSuchElementException as e:
@@ -268,61 +265,13 @@ class App(ctk.CTk):
             # click side menu "Work Order", wait for page load
             self.web.browser_xpathclick('//span[contains(text(), "Work Order")]/../..//a')
             time.sleep(2)
-            # click button "New Work Order", wait for page load
-            self.web.browser_xpathclick('//button[@id="newWorkOrderBtn"]')
-            time.sleep(2)
-            # select dropdown "Core Online"
-            dropdown = self.web.browser_xpathclick('//select[@id="template_sos_type"]')
-            option_value = self.web.driver.find_element(
-                By.XPATH,
-                '//select[@id="template_sos_type"]//option[contains(text(), "Core Online")]'
-            ).get_attribute("value")
-            Select(dropdown).select_by_value(option_value)
-            time.sleep(2)
-            # input SiteID (Proms Site), click outside, wait
-            self.web.browser_input('//input[@id="siteNodeId"]', proms_site)
-            time.sleep(2)
-            # input Site From (Proms Node), wait
-            self.web.browser_input('//input[@id="s_from"]', proms_node)
-            time.sleep(2)
-            # click dropdown button "projectTypeList", wait
-            self.web.browser_xpathclick('//div[@id="template_projectType"]//button')
-            time.sleep(2)
-            # click option button "ACC MPLS"
-            self.web.browser_xpathclick('//div[@id="template_projectType"]//span[contains(text(), "ACC MPLS")]')
-            time.sleep(2)
-            self.web.browser_xpathclick('//div[@id="template_projectType"]//button')
-            # click select dropdown option, title="200070 - Huawei IPRAN DN expansion"
-            dropdown = self.web.browser_xpathclick('//select[@id="ddlProject"]')
-            option_value = self.web.driver.find_element(
-                By.XPATH,
-                f'//select[@id="ddlProject"]//option[contains(text(), "{project_id}")]'
-            ).get_attribute("value")
-            Select(dropdown).select_by_value(option_value)
-            time.sleep(2)
-            # click select dropdown option, contains "TRUE INTERNET CORPORATION CO."
-            dropdown = self.web.browser_xpathclick('//select[@id="ddlCompany"]')
-            option_value = self.web.driver.find_element(
-                By.XPATH,
-                '//select[@id="ddlCompany"]//option[contains(text(), "TRUE INTERNET CORPORATION CO.")]'
-            ).get_attribute("value")
-            Select(dropdown).select_by_value(option_value)
-            time.sleep(2)
-            # click select dropdown option, contains "CO104"
-            dropdown = self.web.browser_xpathclick('//select[@id="ddlWoTemplate"]')
-            option_value = self.web.driver.find_element(
-                By.XPATH,
-                '//select[@id="ddlWoTemplate"]//option[contains(text(), "CO104")]'
-            ).get_attribute("value")
-            Select(dropdown).select_by_value(option_value)
-            time.sleep(2)
 
             if project_id and proms_site and proms_node:
                 step_nth[0] = True
             project_excel.loc[order, 'Ref. no.'].value = project_id
             step_nth[2] = True
 
-        except NoSuchElementException, TimeoutException as e:
+        except (NoSuchElementException, TimeoutException) as e:
             logging.info(e)
         finally:
             logmsg = f'{project_id},{proms_site},{proms_node},{self.plan_start},' + \
@@ -370,6 +319,9 @@ class App(ctk.CTk):
         logging.info('### Automation start..')
         loghead = 'ProjectID,PromsSite,PromsNode,PlanStart,gotTemplate,submittedWO,foundRefNo,finalOK'
         logging.info(loghead)
+        # click side menu "Work Order", wait for page load
+        self.web.browser_xpathclick('//span[contains(text(), "Work Order")]/../..//a')
+        time.sleep(2)
 
         # for each project
         for project_file in self.projects:
