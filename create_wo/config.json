@@ -10,13 +10,13 @@
         "binary_path": "D:/Chrome/chrome.exe",
         "driver_path": "D:/Chrome/driver/chromedriver.exe"
     },
-    "RUNMODE": "test",
+    "RUNMODE": "real",
     "Preferences": {
         "_comment1": "Supported modes : Light, Dark, System",
         "app_mode": "Light",
         "_comment2": "Supported themes : green, dark-blue, blue",
         "color_theme": "blue",
         "_comment3": "Captcha waiting time (s) when login",
-        "captcha-wait": 12
+        "captcha-wait": 10
     }
 }
