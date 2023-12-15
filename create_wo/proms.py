@@ -322,7 +322,7 @@ class App(ctk.CTk):
             project_excel.loc[order, 'Ref. no.'].value = project_id
             step_nth[2] = True
 
-        except NoSuchElementException as e:
+        except NoSuchElementException, TimeoutException as e:
             logging.info(e)
         finally:
             logmsg = f'{project_id},{proms_site},{proms_node},{self.plan_start},' + \
