@@ -2,8 +2,8 @@
     "WEBSITE": {
         "_comment1": "Specify website URL and login credentials.",
         "url": "https://proms.truecorp.co.th/proms",
-        "user":"Siriro2",
-        "pass": "Senses19871987$"
+        "user":"test",
+        "pass": "Example123$"
     },
     "CHROME": {
         "_comment1": "Specify installation path of Chrome browser.",
