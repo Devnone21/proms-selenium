@@ -145,6 +145,7 @@ class App(ctk.CTk):
         proms_site = project_excel.loc[order, 'Proms Site'].value
         proms_node = "" # project_excel.loc[order, 'Proms Node'].value
         step_nth = [False] * 4
+        ref_no = ''
         try:
             # click button "New Work Order", wait for page load
             self.web.browser_xpathclick('//button[@id="newWorkOrderBtn"]')
