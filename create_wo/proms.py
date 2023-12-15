@@ -253,7 +253,7 @@ class App(ctk.CTk):
             logging.info(e)
         finally:
             logmsg = f'{project_id},{proms_site},{proms_node},{self.plan_start},' + \
-                     ','.join([str(n) for n in step_nth]) + result
+                     ','.join([str(n) for n in step_nth]) + ref_no
             logging.info(logmsg)
 
     def demo_create_wo(self, order, project_excel):
