@@ -323,7 +323,7 @@ class App(ctk.CTk):
         logging.info(loghead)
         # click side menu "Work Order", wait for page load
         self.web.browser_xpathclick('//span[contains(text(), "Work Order")]/../..//a')
-        time.sleep(2)
+        time.sleep(6)
 
         # for each project
         for project_file in self.projects:
