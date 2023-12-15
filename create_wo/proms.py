@@ -11,10 +11,11 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait, Select
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
+from datetime import datetime
 import logging
 
 logging.basicConfig(
-    filename='out.log', filemode='a', level=logging.DEBUG,
+    filename=f'out.log.{datetime.now().strftime("%m%d%H%M")}', filemode='a', level=logging.DEBUG,
     datefmt='%Y-%m-%d %H:%M:%S',
     format='%(asctime)s, %(levelname)s, %(message)s')
 
@@ -54,7 +55,7 @@ class BROWSER:
     def browser_xpathclick(self, xpath):
         btn = self.driver.find_element(By.XPATH, xpath)
         self.driver.execute_script("arguments[0].click();", btn)
-        WebDriverWait(self.driver, 10).until(lambda d: d.execute_script("return jQuery.active == 0"))
+        WebDriverWait(self.driver, 12).until(lambda d: d.execute_script("return jQuery.active == 0"))
         return btn
 
     def browser_input(self, xpath, text):
@@ -238,7 +239,7 @@ class App(ctk.CTk):
             result = WebDriverWait(self.web.driver, 10).until(EC.presence_of_element_located((
                 By.XPATH, '//*[@id="success_s_modal"]//span'))).get_property("innerText")
             ref_no = extract_ref_no(str(result))
-            logging.info(f'Extract Ref.No.: {ref_no} from {result}')
+            logging.debug(f'Extract Ref.No.: {ref_no} from {result}')
             if ref_no:
                 project_excel.loc[order, 'Ref. no.'].value = ref_no
                 step_nth[2] = True
@@ -248,11 +249,11 @@ class App(ctk.CTk):
             time.sleep(6)
             step_nth[3] = True
 
-        except NoSuchElementException as e:
+        except (NoSuchElementException, TimeoutException) as e:
             logging.info(e)
         finally:
             logmsg = f'{project_id},{proms_site},{proms_node},{self.plan_start},' + \
-                     ','.join([str(n) for n in step_nth])
+                     ','.join([str(n) for n in step_nth]) + result
             logging.info(logmsg)
 
     def demo_create_wo(self, order, project_excel):
@@ -317,7 +318,7 @@ class App(ctk.CTk):
 
         # ============================ Work Order ===============================
         logging.info('### Automation start..')
-        loghead = 'ProjectID,PromsSite,PromsNode,PlanStart,gotTemplate,submittedWO,foundRefNo,finalOK'
+        loghead = 'ProjectID,PromsSite,PromsNode,PlanStart,gotTemplate,submittedWO,foundRefNo,finalOK,resultRefNo'
         logging.info(loghead)
         # click side menu "Work Order", wait for page load
         self.web.browser_xpathclick('//span[contains(text(), "Work Order")]/../..//a')
@@ -331,7 +332,6 @@ class App(ctk.CTk):
 
             # for each WO in a project
             for wo in range(len(sf)):
-                # self.demo_create_wo(order=wo, project_excel=sf)
                 wo_func = {'test': self.demo_create_wo, 'real': self.auto_create_wo}
                 create_wo = wo_func[config.get('RUNMODE', 'test')]
                 create_wo(order=wo, project_excel=sf)
