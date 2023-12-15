@@ -10,7 +10,7 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait, Select
 from selenium.webdriver.common.by import By
-from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import NoSuchElementException, TimeoutException
 import logging
 
 logging.basicConfig(
@@ -97,7 +97,7 @@ class App(ctk.CTk):
         super().__init__(*args, **kwargs)
         self.web = None
         self.projects = []
-        self.plan_start = '31/12/2023'
+        self.plan_start = '01/09/2023'
 
         self.title("Auto Create Work Order - Proms")
         self.geometry("600x400")
@@ -228,7 +228,7 @@ class App(ctk.CTk):
             input_box.clear()
             input_box.send_keys(self.plan_start)
             self.web.browser_scrolldown()
-            time.sleep(2)
+            time.sleep(1)
             # click button "Create Work Order", long wait until
             self.web.browser_xpathclick('//button[contains(text(), "Create Work Order")]')
             time.sleep(2)

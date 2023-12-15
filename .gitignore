@@ -12,7 +12,7 @@ venv/
 auto_wo/
 
 # other files
-*.log
+*.log*
 *.bak
 *.json
 *.xlsx
