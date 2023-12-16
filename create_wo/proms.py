@@ -89,7 +89,7 @@ def extract_ref_no(inner_text: str):
     split_colon = split_dash[-1].split('/')
     if not split_colon:
         return ''
-    return split_colon[-1]
+    return split_colon[-1].strip()
 
 
 # ========================= CTk App Class ============================
@@ -213,14 +213,6 @@ class App(ctk.CTk):
             self.web.browser_xpathclick('//div[@id="demo0"]//td[contains(text(), "NT_IE_TK04")]/..//input')
             self.web.browser_xpathclick('//div[@id="demo0"]//td[contains(text(), "NT_IE_TK05")]/..//input')
             self.web.browser_xpathclick('//div[@id="demo0"]//td[contains(text(), "NT_IE_TK06")]/..//input')
-            # select dropdown "Core Network"
-            # dropdown = self.web.browser_xpathclick('//select[@id="ddlWorkType0"]')
-            # option_value = self.web.driver.find_element(
-            #     By.XPATH,
-            #     '//select[@id="ddlWorkType0"]//option[contains(text(), "Core Network")]'
-            # ).get_attribute("value")
-            # Select(dropdown).select_by_value(option_value)
-            # time.sleep(2)
             # in ng-date-picker, clear and input plan start.
             input_box = WebDriverWait(self.web.driver, 10).until(EC.element_to_be_clickable((
                 By.XPATH, '//input[@id="txtPlanStartDate0"]')))
@@ -247,7 +239,7 @@ class App(ctk.CTk):
 
             # click button "Create Work Order", long wait until
             self.web.browser_xpathclick('//button[contains(text(), "OK")]')
-            time.sleep(6)
+            time.sleep(8)
             step_nth[3] = True
 
         except (NoSuchElementException, TimeoutException) as e:
@@ -258,11 +250,12 @@ class App(ctk.CTk):
             logging.info(logmsg)
 
     def demo_create_wo(self, order, project_excel):
-        # 'ProjectID,PromsSite,PromsNode,PlanStart,gotTemplate,submittedWO,foundRefNo,finalOK'
+        # 'ProjectID,PromsSite,PromsNode,PlanStart,gotTemplate,submittedWO,foundRefNo,finalOK,resultRefNo'
         project_id = project_excel.loc[order, 'Project ID'].value
         proms_site = project_excel.loc[order, 'Proms Site'].value
         proms_node = project_excel.loc[order, 'Proms Node'].value
         step_nth = [False] * 4
+        ref_no = ''
         try:
             # click side menu "Work Order", wait for page load
             self.web.browser_xpathclick('//span[contains(text(), "Work Order")]/../..//a')
@@ -277,7 +270,7 @@ class App(ctk.CTk):
             logging.info(e)
         finally:
             logmsg = f'{project_id},{proms_site},{proms_node},{self.plan_start},' + \
-                     ','.join([str(n) for n in step_nth])
+                     ','.join([str(n) for n in step_nth]) + f',{ref_no}'
             logging.info(logmsg)
 
     def run_automation(self):
@@ -323,7 +316,7 @@ class App(ctk.CTk):
         logging.info(loghead)
         # click side menu "Work Order", wait for page load
         self.web.browser_xpathclick('//span[contains(text(), "Work Order")]/../..//a')
-        time.sleep(6)
+        time.sleep(10)
 
         # for each project
         for project_file in self.projects:

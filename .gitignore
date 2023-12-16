@@ -12,6 +12,8 @@ venv/
 auto_wo/
 
 # other files
+output/
+output.*
 *.log*
 *.bak
 *.json
