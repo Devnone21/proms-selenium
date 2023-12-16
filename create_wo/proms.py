@@ -1,3 +1,10 @@
+from datetime import datetime
+import logging
+logging.basicConfig(
+    filename=f'out.log.{datetime.now().strftime("%m%d%H%M")}', filemode='a', level=logging.DEBUG,
+    datefmt='%Y-%m-%d %H:%M:%S',
+    format='%(asctime)s, %(levelname)s, %(message)s')
+
 import json
 import os
 import time
@@ -11,13 +18,6 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait, Select
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
-from datetime import datetime
-import logging
-
-logging.basicConfig(
-    filename=f'out.log.{datetime.now().strftime("%m%d%H%M")}', filemode='a', level=logging.DEBUG,
-    datefmt='%Y-%m-%d %H:%M:%S',
-    format='%(asctime)s, %(levelname)s, %(message)s')
 
 # Load configuration e.g driver path, web info
 config = json.load(open('config.json'))
@@ -244,6 +244,9 @@ class App(ctk.CTk):
 
         except (NoSuchElementException, TimeoutException) as e:
             logging.info(e)
+            # go to "Work Order", https://proms.truecorp.co.th/proms/workorder
+            self.web.driver.get(f'{config.get("WEBSITE").get("url")}/workorder' )
+            time.sleep(10)
         finally:
             logmsg = f'{project_id},{proms_site},{proms_node},{self.plan_start},' + \
                      ','.join([str(n) for n in step_nth]) + f',{ref_no}'
@@ -259,7 +262,7 @@ class App(ctk.CTk):
         try:
             # click side menu "Work Order", wait for page load
             self.web.browser_xpathclick('//span[contains(text(), "Work Order")]/../..//a')
-            time.sleep(2)
+            time.sleep(10)
 
             if project_id and proms_site and proms_node:
                 step_nth[0] = True
